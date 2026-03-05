@@ -1,11 +1,8 @@
 package com.sarthak.workflow.auth;
 
 import com.sarthak.workflow.domain.entity.User;
-import com.sarthak.workflow.repository.UserRepository;
-import com.sarthak.workflow.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,22 +10,22 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
-
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
 
-        User user = userRepository.findByUsername(request.username())
-                .orElseThrow(() -> new RuntimeException("Invalid credentials"));
+        if (!"admin".equals(request.username()) ||
+                !"admin123".equals(request.password())) {
 
-        if (!passwordEncoder.matches(request.password(), user.getPasswordHash())) {
-            throw new RuntimeException("Invalid credentials");
+            return ResponseEntity.status(401).build();
         }
 
-        String token = jwtService.generateToken(user.getUsername());
+        User user = new User();
+        user.setId(1L);
+        user.setUsername("admin");
+        user.setEmail("admin@test.com");
 
-        return ResponseEntity.ok(new LoginResponse(token, user));
+        return ResponseEntity.ok(
+                new LoginResponse("dev-token", user)
+        );
     }
 }

@@ -1,9 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/workflow_db
-    username: workflow_user
-    password: workflow_pass
-    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/workflow
+    username: postgres
+    password: postgres
 
   jpa:
     hibernate:
