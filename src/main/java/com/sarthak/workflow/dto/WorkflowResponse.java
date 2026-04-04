@@ -9,5 +9,7 @@ public record WorkflowResponse(
         String name,
         String description,
         WorkflowStatus status,
-        LocalDateTime createdAt
+        String createdBy,
+        LocalDateTime createdAt,
+        long taskCount
 ) {}
